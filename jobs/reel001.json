@@ -1,9 +1,49 @@
-{"name": "reel001", "model": "bulbul:v3", "lines": [
- {"id": "01", "speaker": "shubh", "pace": 1.1, "text": "Bhai, naya game aa gaya! Bas price check karta hoon..."},
- {"id": "02", "speaker": "shubh", "pace": 1.1, "text": "Itna mehenga?! Price dekh ke toh mera PC bhi hang ho gaya!"},
- {"id": "03", "speaker": "manan", "pace": 1.0, "text": "Arre Golu, full price kaun deta hai aajkal? Cheap PC Games pe dekh!"},
- {"id": "04", "speaker": "shubh", "pace": 1.1, "text": "Sirf ninety-nine rupaye?! Sach mein?"},
- {"id": "05", "speaker": "manan", "pace": 1.0, "text": "Haan bhai! Yahan games shuru hi hote hain sirf ninety-nine rupaye se!"},
- {"id": "06", "speaker": "shubh", "pace": 1.1, "text": "Game bhi khela, aur jeb bhi bachi!"},
- {"id": "07", "speaker": "manan", "pace": 1.0, "text": "Games ninety-nine rupaye se shuru... saste mein kharido, apni jeb bachao!"}
-]}
+{
+ "name": "reel001",
+ "model": "bulbul:v3",
+ "lines": [
+  {
+   "id": "01",
+   "speaker": "shubh",
+   "pace": 1.1,
+   "text": "Bhai, naya game aa gaya! Bas price check karta hoon..."
+  },
+  {
+   "id": "02",
+   "speaker": "shubh",
+   "pace": 1.1,
+   "text": "Itna mehenga?! Price dekh ke toh mera PC bhi hang ho gaya!"
+  },
+  {
+   "id": "03",
+   "speaker": "manan",
+   "pace": 1.0,
+   "text": "Arre Golu, full price kaun deta hai aajkal? Cheap PC Games pe dekh!"
+  },
+  {
+   "id": "04",
+   "speaker": "shubh",
+   "pace": 1.1,
+   "text": "Sirf ninety-nine rupaye?! Sach mein?"
+  },
+  {
+   "id": "05",
+   "speaker": "manan",
+   "pace": 1.0,
+   "text": "Haan bhai! Yahan games shuru hi hote hain sirf ninety-nine rupaye se!"
+  },
+  {
+   "id": "06",
+   "speaker": "shubh",
+   "pace": 1.1,
+   "text": "Game bhi khela, aur jeb bhi bachi!"
+  },
+  {
+   "id": "07",
+   "speaker": "manan",
+   "pace": 1.0,
+   "text": "Games ninety-nine rupaye se shuru... saste mein kharido, apni jeb bachao!"
+  }
+ ],
+ "v": 2
+}

@@ -1,10 +1,7 @@
 name: Generate voice (Sarvam)
 on:
-  workflow_dispatch:
-    inputs:
-      job:
-        description: "Job file in jobs/ (without .json)"
-        required: true
+  push:
+    paths: ["jobs/*.json"]
 permissions:
   contents: write
 concurrency: { group: tts, cancel-in-progress: false }
@@ -13,16 +10,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with: { fetch-depth: 2 }
+      - name: Find new job files
+        id: jobs
+        run: echo "files=$(git diff --name-only --diff-filter=AM HEAD~1 HEAD -- 'jobs/*.json' | tr '\n' ' ')" >> $GITHUB_OUTPUT
       - uses: actions/setup-python@v5
         with: { python-version: "3.11" }
       - name: Generate audio
         env:
           SARVAM_API_KEY: ${{ secrets.SARVAM_API_KEY }}
-        run: python engine/tts.py "jobs/${{ inputs.job }}.json"
+        run: for f in ${{ steps.jobs.outputs.files }}; do python engine/tts.py "$f"; done
       - name: Commit audio
         if: always()
         run: |
           git config user.name "reels-bot"; git config user.email "reels-bot@users.noreply.github.com"
           git add audio || true
-          git commit -m "voice: ${{ inputs.job }}" || echo "nothing to commit"
+          git commit -m "voice: ${{ steps.jobs.outputs.files }}" || echo "nothing to commit"
           git pull --rebase && git push
