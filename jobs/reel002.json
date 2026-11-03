@@ -1,10 +1,10 @@
-{"name": "reel002", "model": "bulbul:v3", "lines": [
- {"id": "01", "speaker": "ishita", "pace": 0.95, "text": "Ek minute! Sirf ninety-nine rupaye mein game? Itna sasta... bharosa kaise karein?"},
- {"id": "02", "speaker": "shubh", "pace": 0.95, "text": "Arre Nikki, tension mat le! Sab kuch proof ke saath hai."},
- {"id": "03", "speaker": "manan", "pace": 0.9, "text": "Cheap PC Games Store GST registered hai... aur Udyam registered bhi!"},
- {"id": "04", "speaker": "ishita", "pace": 0.95, "text": "Achha? Aur customers kitne hain?"},
- {"id": "05", "speaker": "shubh", "pace": 0.95, "text": "Two thousand plus happy customers! Sab trust karte hain!"},
- {"id": "06", "speaker": "manan", "pace": 0.9, "text": "Aur proof chahiye? Website pe neeche scroll karo... har delivery ka WhatsApp screenshot upload hai!"},
- {"id": "07", "speaker": "ishita", "pace": 0.95, "text": "Wow! Itna transparent? Phir toh main bhi aaj hi game le rahi hoon!"},
- {"id": "08", "speaker": "manan", "pace": 0.9, "text": "Trusted store, genuine games... sirf ninety-nine rupaye se! Link bio mein hai!"}
+{"name": "reel002", "model": "bulbul:v4-flash", "lines": [
+ {"id": "01", "speaker": "ritu_hi_reels", "pace": 1.05, "text": "गोलू! सिर्फ़ निन्यानवे रुपये में game? इतना सस्ता... यार, इन पर trust कैसे करूँ?"},
+ {"id": "02", "speaker": "sunny_hi_reels", "pace": 1.05, "text": "अरे निक्की, tension मत ले! राजू, ज़रा इसे proof दिखा दे!"},
+ {"id": "03", "speaker": "shubh_hi_ads", "pace": 1.05, "text": "देखो निक्की, Cheap PC Games Store, GST registered है... और Udyam, यानी MSME registered भी!"},
+ {"id": "04", "speaker": "ritu_hi_reels", "pace": 1.05, "text": "अच्छा जी? और customers का क्या?"},
+ {"id": "05", "speaker": "shubh_hi_ads", "pace": 1.05, "text": "दो हज़ार से ज़्यादा happy customers इन पर trust करते हैं!"},
+ {"id": "06", "speaker": "sunny_hi_reels", "pace": 1.05, "text": "और सुन! Website पर नीचे scroll कर... हर delivery का WhatsApp screenshot, proof के साथ upload है!"},
+ {"id": "07", "speaker": "ritu_hi_reels", "pace": 1.05, "text": "वाह! इतना सारा proof? अब तो पक्का trust है!"},
+ {"id": "08", "speaker": "shubh_hi_ads", "pace": 1.05, "text": "तो देर किस बात की? Games निन्यानवे रुपये से शुरू... अभी check करो, cheappcgames dot in dot net!"}
 ]}

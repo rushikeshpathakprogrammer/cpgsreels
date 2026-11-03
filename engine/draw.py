@@ -55,10 +55,15 @@ def paint_text(ctx, text, cx, cy, size, scale=1.0, alpha=1.0, rot=0, **kw):
 CHARS = {
  "golu": dict(skin="#C68B59", top="#F2C14E", top2="#E0A92E", hair="curly", glasses=False, name="GOLU"),
  "raju": dict(skin="#A86E46", top="#2FA58A", top2="#23806B", hair="neat", glasses=True, name="RAJU"),
+ "nikki": dict(skin="#D29A6E", top="#B15EF0", top2="#8E3FD0", hair="long", glasses=False, name="NIKKI"),
 }
 def draw_character(ctx, kind, x, y, s=1.0, mouth=0.0, expr="normal", t=0.0, look=(0,0), arm="down", prop=None, blink=False):
     c=CHARS[kind]; skin=hexc(c["skin"]); lw=7*s
     ctx.save(); ctx.translate(x,y); ctx.scale(s,s); lw=7
+    if c["hair"]=="long":  # hair behind head/shoulders
+        ctx.move_to(-135,-40); ctx.curve_to(-170,120,-160,260,-120,330); ctx.line_to(120,330)
+        ctx.curve_to(160,260,170,120,135,-40); ctx.curve_to(120,-170,-120,-170,-135,-40); ctx.close_path()
+        ctx.set_source_rgb(0.14,0.08,0.07); ctx.fill()
     # body
     ctx.move_to(-170,160); ctx.curve_to(-180,330,-200,520,-215,1100); ctx.line_to(215,1100)
     ctx.curve_to(200,520,180,330,170,160); ctx.curve_to(90,120,-90,120,-170,160); ctx.close_path()
@@ -68,6 +73,9 @@ def draw_character(ctx, kind, x, y, s=1.0, mouth=0.0, expr="normal", t=0.0, look
             ctx.move_to(dx,150); ctx.line_to(dx*1.1,290); ctx.set_source_rgb(1,1,1); ctx.set_line_width(10); ctx.stroke()
             ellipse(ctx,dx*1.1,295,9,9); fill_stroke(ctx,(1,1,1),4)
         ctx.move_to(-110,470); ctx.line_to(110,470); ctx.set_source_rgb(*hexc(c["top2"])); ctx.set_line_width(8); ctx.stroke()
+    elif kind=="nikki":
+        ctx.arc(0,190,40,0.2,math.pi-0.2); ctx.set_source_rgb(1,0.85,0.3); ctx.set_line_width(5); ctx.stroke()
+        ellipse(ctx,0,232,9,9); ctx.set_source_rgb(1,0.85,0.3); ctx.fill()
     else:  # jacket opening with white tee
         ctx.move_to(-60,140); ctx.line_to(-35,1100); ctx.line_to(35,1100); ctx.line_to(60,140); ctx.close_path()
         fill_stroke(ctx,(0.96,0.96,0.94),5)
@@ -90,10 +98,19 @@ def draw_character(ctx, kind, x, y, s=1.0, mouth=0.0, expr="normal", t=0.0, look
         ellipse(ctx,0,320,44,44); fill_stroke(ctx, skin, lw)
         ctx.restore()
     arms = arm if isinstance(arm,tuple) else (arm,arm)
-    arm_shape(-1, arms[0]); arm_shape(1, arms[1])
+    if arms[0]=="crossed":
+        rrect(ctx,-175,330,350,95,45); fill_stroke(ctx, hexc(c["top2"]), lw)
+        ellipse(ctx,-150,378,40,40); fill_stroke(ctx, skin, lw); ellipse(ctx,150,378,40,40); fill_stroke(ctx, skin, lw)
+        for side in (-1,1):
+            ctx.save(); ctx.translate(side*175,200); rrect(ctx,-45,0,90,170,40); fill_stroke(ctx, hexc(c["top"]), lw); ctx.restore()
+    else:
+        arm_shape(-1, arms[0]); arm_shape(1, arms[1])
     # neck + head
     rrect(ctx,-40,90,80,80,20); fill_stroke(ctx, skin, lw)
     ellipse(ctx,-118,10,26,34); fill_stroke(ctx, skin, lw); ellipse(ctx,118,10,26,34); fill_stroke(ctx, skin, lw)
+    if kind=="nikki":
+        for side in (-1,1):
+            ctx.arc(side*120,48,14,0,2*math.pi); ctx.set_source_rgb(1,0.82,0.25); ctx.set_line_width(5); ctx.stroke()
     ellipse(ctx,0,0,118,132); fill_stroke(ctx, skin, lw)
     # hair
     hair=(0.11,0.09,0.09)
@@ -102,6 +119,12 @@ def draw_character(ctx, kind, x, y, s=1.0, mouth=0.0, expr="normal", t=0.0, look
             ellipse(ctx,hx,hy,r,r); ctx.set_source_rgb(*hair); ctx.fill()
         for (hx,hy,r) in [(-55,-122,14),(20,-140,12),(80,-100,10)]:
             ellipse(ctx,hx,hy,r,r*0.6); ctx.set_source_rgba(1,1,1,0.18); ctx.fill()
+    elif c["hair"]=="long":
+        ctx.move_to(-125,0); ctx.curve_to(-140,-130,-30,-170,40,-150); ctx.curve_to(120,-130,140,-60,125,0)
+        ctx.curve_to(95,-70,50,-95,10,-75); ctx.curve_to(-20,-100,-80,-80,-125,0); ctx.close_path()
+        ctx.set_source_rgb(0.14,0.08,0.07); ctx.fill()
+        # hair clip
+        star(ctx,85,-95,20); ctx.set_source_rgb(*hexc("#FFD23F")); ctx.fill_preserve(); ctx.set_source_rgb(*INK); ctx.set_line_width(3); ctx.stroke()
     else:
         ctx.move_to(-122,-10); ctx.curve_to(-130,-120,-40,-160,30,-148); ctx.curve_to(110,-140,135,-70,122,-10)
         ctx.curve_to(100,-60,40,-95,-20,-80); ctx.curve_to(-70,-70,-100,-40,-122,-10); ctx.close_path()
@@ -120,10 +143,20 @@ def draw_character(ctx, kind, x, y, s=1.0, mouth=0.0, expr="normal", t=0.0, look
         if expr=="star":
             star(ctx,cx+look[0]*6,ey+look[1]*6,24); ctx.set_source_rgb(*hexc("#FFC21A")); ctx.fill_preserve()
             ctx.set_source_rgb(*INK); ctx.set_line_width(3); ctx.stroke()
+        elif expr=="skeptic":
+            ellipse(ctx,cx+12,ey+4,14,14); ctx.set_source_rgb(*INK); ctx.fill()
+            ctx.rectangle(cx-er-4,ey-er*1.15,2*er+8,er*0.9); ctx.set_source_rgb(*skin); ctx.fill()
+            ctx.move_to(cx-er,ey-er*0.25); ctx.line_to(cx+er,ey-er*0.25); ctx.set_source_rgb(*INK); ctx.set_line_width(6); ctx.stroke()
         else:
             pr = 9 if big else 14
             ellipse(ctx,cx+look[0]*10,ey+look[1]*10,pr,pr); ctx.set_source_rgb(*INK); ctx.fill()
             ellipse(ctx,cx+look[0]*10-4,ey+look[1]*10-5,4,4); ctx.set_source_rgb(1,1,1); ctx.fill()
+    if kind=="nikki" and expr not in ("happy",) and not blink:
+        for side in (-1,1):
+            for k in range(3):
+                a=-2.3+k*0.35 if side<0 else -0.84-k*0.35
+                ctx.move_to(side*ex+er*math.cos(a),ey+er*1.1*math.sin(a)); ctx.line_to(side*ex+(er+16)*math.cos(a),ey+(er*1.1+16)*math.sin(a))
+                ctx.set_source_rgb(*INK); ctx.set_line_width(5); ctx.stroke()
     if c["glasses"]:
         for side in (-1,1):
             ellipse(ctx,side*ex,ey,44,44); ctx.set_source_rgb(*INK); ctx.set_line_width(6); ctx.stroke()
@@ -133,7 +166,8 @@ def draw_character(ctx, kind, x, y, s=1.0, mouth=0.0, expr="normal", t=0.0, look
     by = ey-55 - (14 if expr in ("shock","star") else 0)
     for side in (-1,1):
         tilt = {"angry":12,"sad":-10}.get(expr,0)*side
-        ctx.move_to(side*ex-25,by+tilt*-0.5); ctx.line_to(side*ex+25,by-6+tilt*0.5); ctx.stroke()
+        lift = -22 if (expr=="skeptic" and side>0) else 0
+        ctx.move_to(side*ex-25,by+tilt*-0.5+lift); ctx.line_to(side*ex+25,by-6+tilt*0.5+lift*1.3); ctx.stroke()
     # nose
     ctx.move_to(-4,22); ctx.curve_to(12,40,10,52,-6,56); ctx.set_line_width(6); ctx.stroke()
     # cheeks
@@ -148,8 +182,10 @@ def draw_character(ctx, kind, x, y, s=1.0, mouth=0.0, expr="normal", t=0.0, look
         ellipse(ctx,0,my+mh*0.45,mw*0.6,mh*0.35); ctx.set_source_rgb(*hexc("#E2697A")); ctx.fill()
         if expr!="shock":
             ctx.rectangle(-mw*0.7,my-mh+2,mw*1.4,mh*0.28); ctx.set_source_rgb(1,1,1); ctx.fill()
+    elif expr=="skeptic":
+        ctx.move_to(-28,my-2); ctx.curve_to(-5,my-8,15,my+4,30,my-6); ctx.set_source_rgb(*INK); ctx.set_line_width(8); ctx.stroke()
     else:
-        ctx.arc(0,my-22,40,math.pi*0.2,math.pi*0.8); ctx.set_source_rgb(*INK); ctx.set_line_width(8); ctx.stroke()
+        ctx.arc(0,my-22,40,math.pi*0.2,math.pi*0.8); ctx.set_source_rgb(*(hexc("#C2185B") if kind=="nikki" else INK)); ctx.set_line_width(8); ctx.stroke()
     # sweat drop for shock
     if expr=="shock":
         ctx.move_to(120,-80); ctx.curve_to(105,-40,110,-20,128,-18); ctx.curve_to(146,-20,148,-45,120,-80)

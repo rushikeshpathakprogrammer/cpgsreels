@@ -22,7 +22,7 @@ def main(job_path):
     report = []
     for ln in job["lines"]:
         payload = {"text": ln["text"], "target_language_code": ln.get("lang", "hi-IN"),
-                   "speaker": ln["speaker"], "model": job.get("model", "bulbul:v3"),
+                   "speaker": ln["speaker"], "model": ln.get("model", job.get("model", "bulbul:v3")),
                    "pace": ln.get("pace", 1.0), "speech_sample_rate": 24000}
         if "temperature" in ln: payload["temperature"] = ln["temperature"]
         for attempt in range(3):
@@ -31,6 +31,8 @@ def main(job_path):
             except urllib.error.HTTPError as e:
                 body = e.read().decode(errors="replace")
                 print("HTTP", e.code, body[:500])
+                if e.code in (400, 422) and "target_language_code" in payload and attempt < 2:
+                    payload["language_code"] = payload.pop("target_language_code"); continue
                 if e.code in (429, 500, 502, 503) and attempt < 2: time.sleep(5); continue
                 report.append({"id": ln["id"], "error": f"{e.code} {body[:300]}"}); res = None; break
         if not res: continue
