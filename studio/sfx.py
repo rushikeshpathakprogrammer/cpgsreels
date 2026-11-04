@@ -78,3 +78,48 @@ def boom():
 def riser(dur=0.8):
     t=_t(dur); n=np.random.default_rng(4).normal(0,1,len(t)); f=np.linspace(200,2000,len(t))
     return 0.12*(n*0.5+np.sin(2*np.pi*np.cumsum(f)/SR))*np.linspace(0,1,len(t))
+
+def synthwave_track(duration, bpm=118, seed=0):
+    """Original synthwave bed: four-on-the-floor kick, snare on 2/4, 8th hats, saw bass, detuned pad. Am-F-C-G."""
+    from scipy.signal import butter, lfilter
+    N=int(SR*(duration+1)); out=np.zeros(N); beat=60/bpm
+    roots=[57,53,48,55]  # A F C G (midi)
+    chords=[[57,60,64],[53,57,60],[48,52,55],[55,59,62]]
+    hz=lambda m: 440*2**((m-69)/12)
+    rng=np.random.default_rng(seed)
+    nb=int(duration/beat)+2
+    side=np.ones(N)
+    for b in range(nb):
+        st=int(b*beat*SR)
+        if st>=N: break
+        tk=_t(0.28); fk=np.linspace(140,42,len(tk)); k=0.85*np.sin(2*np.pi*np.cumsum(fk)/SR)*np.exp(-tk*11)
+        e=min(N,st+len(k)); out[st:e]+=k[:e-st]
+        sd=int(0.22*SR); e2=min(N,st+sd); side[st:e2]=np.minimum(side[st:e2],np.linspace(0.35,1,e2-st))
+        if b%2==1:
+            ts=_t(0.2); sn=rng.normal(0,1,len(ts))*np.exp(-ts*18)*0.35+0.25*np.sin(2*np.pi*190*ts)*np.exp(-ts*25)
+            e=min(N,st+len(sn)); out[st:e]+=sn[:e-st]
+        for h in (0,0.5):
+            hs=int((b+h)*beat*SR); th=_t(0.05); hh=rng.normal(0,1,len(th))*np.exp(-th*90)*0.12
+            e=min(N,hs+len(hh)); 
+            if hs<N: out[hs:e]+=np.diff(np.concatenate([[0],hh]))[:e-hs]*3
+    # bass (8ths) + pad per bar
+    bar=4*beat; nbar=int(duration/bar)+2
+    b_,a_=butter(2,900/(SR/2)); bp,ap=butter(2,2200/(SR/2))
+    bass=np.zeros(N); pad=np.zeros(N)
+    for i in range(nbar):
+        r=roots[i%4]; st=int(i*bar*SR)
+        for j in range(8):
+            s=st+int(j*beat/2*SR); tt=_t(beat/2*0.9); f=hz(r-12 + (12 if j%4==3 else 0))
+            saw=2*((tt*f)%1)-1; seg=0.25*saw*env(len(tt),0.003,0.04)
+            e=min(N,s+len(seg))
+            if s<N: bass[s:e]+=seg[:e-s]
+        tt=_t(bar); seg=np.zeros(len(tt))
+        for m in chords[i%4]:
+            for dt in (-0.12,0.12):
+                f=hz(m+dt); seg+=0.05*(2*((tt*f+rng.random())%1)-1)
+        seg*=env(len(tt),0.25,0.4); e=min(N,st+len(seg))
+        if st<N: pad[st:e]+=seg[:e-st]
+    bass=lfilter(b_,a_,bass); pad=lfilter(bp,ap,pad)
+    out=out*0.55+bass*side*1.0+pad*side*0.9
+    out=out/ (np.abs(out).max()+1e-6)*0.8
+    return out[:int(SR*duration)]

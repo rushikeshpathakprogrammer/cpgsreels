@@ -40,8 +40,10 @@ class Mixer:
     def add(self, snd, at, gain=1.0):
         s=int(at*SR); e=min(self.N,s+len(snd))
         if e>s: self.fx[s:e]+=snd[:e-s]*gain
-    def render(self, path, bpm=124, music_gain=0.5):
-        N=self.N; music=sfx.chiptune(self.end+1, bpm=bpm)[:N]; music=np.pad(music,(0,max(0,N-len(music))))
+    def render(self, path, bpm=124, music_gain=0.5, music=None):
+        N=self.N
+        if music is None: music=sfx.chiptune(self.end+1, bpm=bpm)
+        music=music[:N]; music=np.pad(music,(0,max(0,N-len(music))))
         venv=np.convolve(np.abs(self.v),np.ones(SR//10)/(SR//10),mode="same")
         duck=np.where(venv>0.01,0.35,1.0).astype(np.float32); duck=np.convolve(duck,np.ones(SR//8)/(SR//8),mode="same")
         out=self.v*1.0+self.fx*0.55+music*music_gain*duck
