@@ -1,0 +1,11 @@
+{"name": "reel003", "model": "bulbul:v4-flash", "lines": [
+ {"id": "01", "speaker": "sunny_hi_reels", "pace": 1.1, "text": "रुको रुको रुको! GTA 6... सिर्फ़ तेरह सौ रुपये में?!"},
+ {"id": "02", "speaker": "shubh_hi_ads", "pace": 1.08, "text": "हाँ भाई! PS5 पे GTA 6, उन्नीस November को launch... और हमारे तीन plans ready हैं!"},
+ {"id": "03", "speaker": "shubh_hi_ads", "pace": 1.08, "text": "पहला plan... एक महीना, सिर्फ़ तेरह सौ रुपये!"},
+ {"id": "04", "speaker": "sunny_hi_reels", "pace": 1.1, "text": "दूसरा... Offline lifetime, सिर्फ़ दो हज़ार रुपये!"},
+ {"id": "05", "speaker": "ritu_hi_reels", "pace": 1.08, "text": "और मुझे दोस्तों के साथ online खेलना है तो?"},
+ {"id": "06", "speaker": "shubh_hi_ads", "pace": 1.08, "text": "तो Online lifetime... सिर्फ़ तीन हज़ार रुपये! Best deal!"},
+ {"id": "07", "speaker": "ritu_hi_reels", "pace": 1.08, "text": "Wow! पर इतने सस्ते में... trust कैसे करें?"},
+ {"id": "08", "speaker": "sunny_hi_reels", "pace": 1.1, "text": "Trust issues? हमारा पिछला reel देखो! GST registered, Udyam registered, और दो हज़ार से ज़्यादा happy customers!"},
+ {"id": "09", "speaker": "shubh_hi_ads", "pace": 1.08, "text": "तो देर मत करो! अभी book करो... link bio में!"}
+]}
