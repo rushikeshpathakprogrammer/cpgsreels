@@ -1,0 +1,31 @@
+name: Website screenshots
+on:
+  push:
+    paths: ["shots/*.json"]
+permissions:
+  contents: write
+jobs:
+  shots:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 2 }
+      - name: Capture
+        run: |
+          for f in $(git diff --name-only --diff-filter=AM HEAD~1 HEAD -- 'shots/*.json'); do
+            python3 - "$f" <<'PY'
+          import json, subprocess, sys, os
+          job=json.load(open(sys.argv[1])); out="shots/"+job["name"]; os.makedirs(out, exist_ok=True)
+          for s in job["shots"]:
+              cmd=["google-chrome","--headless=new","--no-sandbox","--hide-scrollbars","--disable-gpu",
+                   f"--window-size={s.get('w',430)},{s.get('h',1400)}",f"--force-device-scale-factor={s.get('scale',2.5)}",
+                   "--virtual-time-budget=15000",
+                   "--user-agent=Mozilla/5.0 (Linux; Android 14; Pixel 8) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0 Mobile Safari/537.36",
+                   f"--screenshot={out}/{s['id']}.png", s["url"]]
+              print(" ".join(cmd)); subprocess.run(cmd, timeout=120)
+          PY
+          done
+      - name: Commit
+        run: |
+          git config user.name "reels-bot"; git config user.email "reels-bot@users.noreply.github.com"
+          git add shots || true; git commit -m "screenshots" || echo none; git pull --rebase && git push
