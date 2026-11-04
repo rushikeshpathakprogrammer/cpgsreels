@@ -119,3 +119,20 @@ def encode(frame_fn, NF, wav, out):
         p.stdin.write(frame_fn(i/FPS).get_data())
         if i%300==0: print("frame",i,"/",NF,flush=True)
     p.stdin.close(); p.wait()
+
+# ---- brand logo badge (round, bordered) for top-right of every reel ----
+_LOGO = {}
+def logo_badge(ctx, t=0.0, path="assets/logo.png", cx=W-118, cy=205, r=86, zoom=0.88, ring=(1,1,1), glow=(1,0.3,0.7)):
+    if path not in _LOGO:
+        from PIL import Image as _I
+        im=_I.open(path).convert("RGBA"); s=int(min(im.size)*zoom); im=im.crop(((im.width-s)//2,(im.height-s)//2,(im.width+s)//2,(im.height+s)//2))
+        d=2*r; im=im.resize((d,d),_I.LANCZOS)
+        a=np.array(im).astype(np.float32); al=a[...,3:4]/255
+        bgra=np.ascontiguousarray(np.dstack([a[...,2:3]*al,a[...,1:2]*al,a[...,0:1]*al,a[...,3:4]]).astype(np.uint8))
+        _LOGO[path]=(cairo.ImageSurface.create_for_data(memoryview(bgra),cairo.FORMAT_ARGB32,d,d,d*4),bgra)
+    surf=_LOGO[path][0]
+    g=cairo.RadialGradient(cx,cy,r,cx,cy,r+26); g.add_color_stop_rgba(0,*glow,0.45); g.add_color_stop_rgba(1,*glow,0)
+    ctx.set_source(g); ctx.arc(cx,cy,r+26,0,2*math.pi); ctx.fill()
+    ctx.save(); ctx.arc(cx,cy,r,0,2*math.pi); ctx.clip(); ctx.set_source_surface(surf,cx-r,cy-r); ctx.paint(); ctx.restore()
+    ctx.arc(cx,cy,r,0,2*math.pi); ctx.set_source_rgb(*ring); ctx.set_line_width(7); ctx.stroke()
+    ctx.arc(cx,cy,r+5,0,2*math.pi); ctx.set_source_rgba(*glow,0.9); ctx.set_line_width(3); ctx.stroke()
