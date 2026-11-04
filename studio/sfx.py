@@ -69,3 +69,12 @@ def ticks(dur=1.4, n=22):
     return out
 def heart_pop():
     t=_t(0.25); f=np.linspace(600,1300,len(t)); return 0.35*np.sin(2*np.pi*np.cumsum(f)/SR)*np.exp(-t*12)
+
+def siren(dur=1.2):
+    t=_t(dur); f=700+350*np.sin(2*np.pi*2.2*t); return 0.22*np.sin(2*np.pi*np.cumsum(f)/SR)*env(len(t),0.02,0.2)
+def boom():
+    t=_t(0.9); f=np.linspace(90,30,len(t)); b=0.9*np.sin(2*np.pi*np.cumsum(f)/SR)*np.exp(-t*4)
+    n=np.random.default_rng(9).normal(0,1,len(t))*np.exp(-t*25)*0.3; return b+n
+def riser(dur=0.8):
+    t=_t(dur); n=np.random.default_rng(4).normal(0,1,len(t)); f=np.linspace(200,2000,len(t))
+    return 0.12*(n*0.5+np.sin(2*np.pi*np.cumsum(f)/SR))*np.linspace(0,1,len(t))
