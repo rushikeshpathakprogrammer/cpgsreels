@@ -106,11 +106,16 @@ def draw_character(ctx, kind, x, y, s=1.0, mouth=0.0, expr="normal", t=0.0, look
             ang = -2.35 + 0.1*math.sin(t*8)
         elif mode=="hip":
             ang = 0.55
+        elif mode=="head":
+            ang = 2.93 + 0.04*math.sin(t*20)
+        elif mode=="pad":
+            ang = 0.35 + 0.03*math.sin(t*18+side)
         else:
             ang = 0.15*side*-1
         ctx.translate(sx,200); ctx.rotate(ang*side if mode!="down" else ang)
         rrect(ctx,-45,0,90,300,40); fill_stroke(ctx, hexc(c["top"]), lw)
-        ellipse(ctx,0,320,44,44); fill_stroke(ctx, skin, lw)
+        if mode!="head":
+            ellipse(ctx,0,320,44,44); fill_stroke(ctx, skin, lw)
         if mode=="thumbs":
             rrect(ctx,-12,330,24,60,12); fill_stroke(ctx, skin, 5)
         if mode=="phone":
@@ -150,6 +155,17 @@ def draw_character(ctx, kind, x, y, s=1.0, mouth=0.0, expr="normal", t=0.0, look
         if expr=="happy":
             ctx.arc(cx,ey+8,22,math.pi*1.1,math.pi*1.9); ctx.set_source_rgb(*INK); ctx.set_line_width(8); ctx.stroke()
             continue
+        if expr in ("cry","laugh"):
+            if expr=="cry":
+                ctx.arc(cx,ey-4,22,math.pi*0.1,math.pi*0.9); ctx.set_source_rgb(*INK); ctx.set_line_width(8); ctx.stroke()
+                for k in range(2):
+                    ty=ey+18+((t*260+k*90)%150)
+                    ellipse(ctx,cx+side*8,ty,9,14); ctx.set_source_rgba(0.45,0.8,1,0.9); ctx.fill()
+                ctx.rectangle(cx-10+side*4,ey+14,20,6); ctx.set_source_rgba(0.45,0.8,1,0.8); ctx.fill()
+            else:
+                ctx.arc(cx,ey+8,22,math.pi*1.1,math.pi*1.9); ctx.set_source_rgb(*INK); ctx.set_line_width(8); ctx.stroke()
+                ellipse(ctx,cx+side*30,ey+22,7,10); ctx.set_source_rgba(0.45,0.8,1,0.85); ctx.fill()
+            continue
         if expr=="love":
             ctx.save(); ctx.translate(cx,ey); sc=1.3+0.15*math.sin(t*10); ctx.scale(sc,sc)
             ctx.move_to(0,22); ctx.curve_to(-46,-6,-24,-44,0,-18); ctx.curve_to(24,-44,46,-6,0,22); ctx.close_path()
@@ -169,7 +185,7 @@ def draw_character(ctx, kind, x, y, s=1.0, mouth=0.0, expr="normal", t=0.0, look
             pr = 9 if big else 14
             ellipse(ctx,cx+look[0]*10,ey+look[1]*10,pr,pr); ctx.set_source_rgb(*INK); ctx.fill()
             ellipse(ctx,cx+look[0]*10-4,ey+look[1]*10-5,4,4); ctx.set_source_rgb(1,1,1); ctx.fill()
-    if kind=="nikki" and expr not in ("happy","love"):
+    if kind=="nikki" and expr not in ("happy","love","laugh","cry"):
         for side in (-1,1):
             for k in range(3):
                 a=-1.9+k*0.35 if side==-1 else -1.25-k*0.35
@@ -193,17 +209,25 @@ def draw_character(ctx, kind, x, y, s=1.0, mouth=0.0, expr="normal", t=0.0, look
         ellipse(ctx,side*75,55,20,12); ctx.set_source_rgba(1,0.45,0.45,0.35); ctx.fill()
     # mouth
     my=82
-    if mouth>0.08 or expr=="shock":
-        o = max(mouth, 0.7 if expr=="shock" else 0)
-        mw = 26 if expr=="shock" else 42; mh = 10+34*o
+    if mouth>0.08 or expr in ("shock","laugh","cry"):
+        base={"shock":0.7,"laugh":0.55+0.35*abs(math.sin(t*14)),"cry":0.6+0.2*abs(math.sin(t*9))}.get(expr,0)
+        o = max(mouth, base)
+        mw = 26 if expr=="shock" else (50 if expr in ("laugh","cry") else 42); mh = 10+34*o
         ellipse(ctx,0,my,mw,mh); fill_stroke(ctx,hexc("#5A1622"),6)
         ellipse(ctx,0,my+mh*0.45,mw*0.6,mh*0.35); ctx.set_source_rgb(*hexc("#E2697A")); ctx.fill()
-        if expr!="shock":
+        if expr not in ("shock","cry"):
             ctx.rectangle(-mw*0.7,my-mh+2,mw*1.4,mh*0.28); ctx.set_source_rgb(1,1,1); ctx.fill()
     elif expr=="doubt":
         ctx.move_to(-30,my+4); ctx.curve_to(-5,my-4,15,my+2,32,my-10); ctx.set_source_rgb(*INK); ctx.set_line_width(8); ctx.stroke()
     else:
         ctx.arc(0,my-22,40,math.pi*0.2,math.pi*0.8); ctx.set_source_rgb(*INK); ctx.set_line_width(8); ctx.stroke()
+    for side,mode in ((-1,arms[0]),(1,arms[1])):
+        if mode=="head":
+            a_=(2.93 + 0.04*math.sin(t*20))*side
+            hx=side*175 - 320*math.sin(a_); hy=200 + 320*math.cos(a_)
+            ellipse(ctx,hx,hy,46,46); fill_stroke(ctx, skin, lw)
+            for k in range(3):
+                ctx.move_to(hx-20+k*18,hy-10); ctx.line_to(hx-20+k*18,hy+18); ctx.set_source_rgb(*INK); ctx.set_line_width(4); ctx.stroke()
     # sweat drop for shock
     if expr=="shock":
         ctx.move_to(120,-80); ctx.curve_to(105,-40,110,-20,128,-18); ctx.curve_to(146,-20,148,-45,120,-80)
@@ -279,3 +303,26 @@ def coin(ctx, x, y, r, t):
     ellipse(ctx,0,0,r,r); fill_stroke(ctx,hexc("#FFD23F"),5)
     ctx.restore()
     if sx>0.5: paint_text(ctx,"₹",x,y+2,int(r*1.1),fill=(201,140,0),stroke=(201,140,0),sw=0,font="Baloo2.ttf",pad=4)
+
+
+def gamepad(ctx, x, y, s=1.0, rot=0.0, col="#2B2B36"):
+    ctx.save(); ctx.translate(x,y); ctx.rotate(rot); ctx.scale(s,s)
+    ctx.move_to(-120,-40); ctx.curve_to(-60,-60,60,-60,120,-40); ctx.curve_to(175,-30,190,60,165,85)
+    ctx.curve_to(140,110,105,80,80,45); ctx.line_to(-80,45); ctx.curve_to(-105,80,-140,110,-165,85)
+    ctx.curve_to(-190,60,-175,-30,-120,-40); ctx.close_path(); fill_stroke(ctx,hexc(col),7)
+    for dx,dy,w_,h_ in [(-95,0,14,44),(-95,0,44,14)]:
+        ctx.rectangle(-95-w_/2,-h_/2,w_,h_); ctx.set_source_rgb(0.85,0.85,0.9); ctx.fill()
+    for (bx,by,bc) in [(95,-22,"#FF4D6D"),(122,0,"#3BCEAC"),(95,22,"#4CC9F0"),(68,0,"#FFD23F")]:
+        ellipse(ctx,bx,by,11,11); ctx.set_source_rgb(*hexc(bc)); ctx.fill()
+    for sx in (-38,38):
+        ellipse(ctx,sx,30,16,16); fill_stroke(ctx,hexc("#15151B"),4)
+    ctx.restore()
+
+def skull(ctx, x, y, r=40):
+    ctx.save(); ctx.translate(x,y)
+    ellipse(ctx,0,-6,r,r*0.95); fill_stroke(ctx,(0.97,0.97,0.95),5)
+    rrect(ctx,-r*0.55,r*0.55,r*1.1,r*0.55,8); fill_stroke(ctx,(0.97,0.97,0.95),5)
+    for sx in (-1,1): ellipse(ctx,sx*r*0.38,-2,r*0.24,r*0.28); ctx.set_source_rgb(*INK); ctx.fill()
+    ctx.move_to(0,r*0.22); ctx.line_to(-r*0.1,r*0.42); ctx.line_to(r*0.1,r*0.42); ctx.close_path(); ctx.fill()
+    for k in (-1,0,1): ctx.move_to(k*r*0.25,r*0.6); ctx.line_to(k*r*0.25,r*1.05); ctx.set_line_width(4); ctx.stroke()
+    ctx.restore()

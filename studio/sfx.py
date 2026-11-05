@@ -123,3 +123,14 @@ def synthwave_track(duration, bpm=118, seed=0):
     out=out*0.55+bass*side*1.0+pad*side*0.9
     out=out/ (np.abs(out).max()+1e-6)*0.8
     return out[:int(SR*duration)]
+
+def sad_trombone():
+    out=[]; 
+    for i,(f0,d) in enumerate([(392,0.35),(370,0.35),(349,0.35),(330,0.9)]):
+        t=_t(d); vib=1+0.01*np.sin(2*np.pi*6*t)*(i==3)
+        f=f0*vib*(np.linspace(1,0.94,len(t)) if i==3 else 1)
+        w=sum(a*np.sin(2*np.pi*k*np.cumsum(f)/SR) for k,a in [(1,1),(2,0.5),(3,0.3)])
+        out.append(0.18*w*env(len(t),0.02,0.08))
+    return np.concatenate(out)
+def alarm(dur=1.0):
+    t=_t(dur); s=np.sign(np.sin(2*np.pi*880*t))*(np.sin(2*np.pi*4*t)>0)*0.12; return s*env(len(t),0.01,0.1)
