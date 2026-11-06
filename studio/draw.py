@@ -108,6 +108,8 @@ def draw_character(ctx, kind, x, y, s=1.0, mouth=0.0, expr="normal", t=0.0, look
             ang = 0.55
         elif mode=="head":
             ang = 2.93 + 0.04*math.sin(t*20)
+        elif mode=="shrug":
+            ang = -0.95 + 0.05*math.sin(t*6)
         elif mode=="pad":
             ang = 0.35 + 0.03*math.sin(t*18+side)
         else:
@@ -155,6 +157,20 @@ def draw_character(ctx, kind, x, y, s=1.0, mouth=0.0, expr="normal", t=0.0, look
         if expr=="happy":
             ctx.arc(cx,ey+8,22,math.pi*1.1,math.pi*1.9); ctx.set_source_rgb(*INK); ctx.set_line_width(8); ctx.stroke()
             continue
+        if expr=="excited":
+            star(ctx,cx,ey,34+3*math.sin(t*12)); ctx.set_source_rgb(*hexc("#FFC21A")); ctx.fill_preserve(); ctx.set_source_rgb(*INK); ctx.set_line_width(4); ctx.stroke()
+            continue
+        if expr=="confused":
+            rr = er*(1.25 if side==1 else 0.75)
+            ellipse(ctx,cx,ey,rr,rr*1.1); fill_stroke(ctx,(1,1,1),6)
+            ellipse(ctx,cx+math.sin(t*4+side)*8,ey+math.cos(t*4)*6,11 if side==1 else 8,11 if side==1 else 8); ctx.set_source_rgb(*INK); ctx.fill()
+            continue
+        if expr=="smirk":
+            ellipse(ctx,cx,ey,er,er*1.1); fill_stroke(ctx,(1,1,1),6)
+            ellipse(ctx,cx+look[0]*10,ey+6,13,13); ctx.set_source_rgb(*INK); ctx.fill()
+            ctx.save(); ellipse(ctx,cx,ey,er,er*1.1); ctx.clip(); ctx.rectangle(cx-er,ey-er*1.2,2*er,er*0.85); ctx.set_source_rgb(*skin); ctx.fill(); ctx.restore()
+            ctx.move_to(cx-er,ey-er*0.35); ctx.line_to(cx+er,ey-er*0.35); ctx.set_source_rgb(*INK); ctx.set_line_width(6); ctx.stroke()
+            continue
         if expr in ("cry","laugh"):
             if expr=="cry":
                 ctx.arc(cx,ey-4,22,math.pi*0.1,math.pi*0.9); ctx.set_source_rgb(*INK); ctx.set_line_width(8); ctx.stroke()
@@ -200,7 +216,9 @@ def draw_character(ctx, kind, x, y, s=1.0, mouth=0.0, expr="normal", t=0.0, look
     by = ey-55 - (14 if expr in ("shock","star") else 0)
     for side in (-1,1):
         tilt = {"angry":12,"sad":-10}.get(expr,0)*side
-        lift = -22 if (expr=="doubt" and side==1) else (8 if (expr=="doubt" and side==-1) else 0)
+        lift = -22 if (expr in ("doubt","smirk") and side==1) else (8 if (expr in ("doubt","smirk") and side==-1) else 0)
+        if expr=="confused": lift = -26 if side==1 else 10
+        if expr=="excited": lift = -18
         ctx.move_to(side*ex-25,by+tilt*-0.5+lift); ctx.line_to(side*ex+25,by-6+tilt*0.5+lift); ctx.stroke()
     # nose
     ctx.move_to(-4,22); ctx.curve_to(12,40,10,52,-6,56); ctx.set_line_width(6); ctx.stroke()
@@ -209,14 +227,20 @@ def draw_character(ctx, kind, x, y, s=1.0, mouth=0.0, expr="normal", t=0.0, look
         ellipse(ctx,side*75,55,20,12); ctx.set_source_rgba(1,0.45,0.45,0.35); ctx.fill()
     # mouth
     my=82
-    if mouth>0.08 or expr in ("shock","laugh","cry"):
-        base={"shock":0.7,"laugh":0.55+0.35*abs(math.sin(t*14)),"cry":0.6+0.2*abs(math.sin(t*9))}.get(expr,0)
+    if mouth>0.08 or expr in ("shock","laugh","cry","excited"):
+        base={"shock":0.7,"laugh":0.55+0.35*abs(math.sin(t*14)),"cry":0.6+0.2*abs(math.sin(t*9)),"excited":0.75}.get(expr,0)
         o = max(mouth, base)
-        mw = 26 if expr=="shock" else (50 if expr in ("laugh","cry") else 42); mh = 10+34*o
+        mw = 26 if expr=="shock" else (54 if expr in ("laugh","cry","excited") else 42); mh = 10+34*o
         ellipse(ctx,0,my,mw,mh); fill_stroke(ctx,hexc("#5A1622"),6)
         ellipse(ctx,0,my+mh*0.45,mw*0.6,mh*0.35); ctx.set_source_rgb(*hexc("#E2697A")); ctx.fill()
         if expr not in ("shock","cry"):
             ctx.rectangle(-mw*0.7,my-mh+2,mw*1.4,mh*0.28); ctx.set_source_rgb(1,1,1); ctx.fill()
+    elif expr=="smirk":
+        ctx.move_to(-34,my-4); ctx.curve_to(-10,my+10,20,my+6,40,my-22); ctx.set_source_rgb(*INK); ctx.set_line_width(8); ctx.stroke()
+    elif expr=="confused":
+        ctx.move_to(-34,my); 
+        for k in range(1,7): ctx.line_to(-34+k*11.5,my+(8 if k%2 else -8))
+        ctx.set_source_rgb(*INK); ctx.set_line_width(7); ctx.stroke()
     elif expr=="doubt":
         ctx.move_to(-30,my+4); ctx.curve_to(-5,my-4,15,my+2,32,my-10); ctx.set_source_rgb(*INK); ctx.set_line_width(8); ctx.stroke()
     else:
