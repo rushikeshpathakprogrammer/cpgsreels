@@ -326,3 +326,50 @@ def skull(ctx, x, y, r=40):
     ctx.move_to(0,r*0.22); ctx.line_to(-r*0.1,r*0.42); ctx.line_to(r*0.1,r*0.42); ctx.close_path(); ctx.fill()
     for k in (-1,0,1): ctx.move_to(k*r*0.25,r*0.6); ctx.line_to(k*r*0.25,r*1.05); ctx.set_line_width(4); ctx.stroke()
     ctx.restore()
+
+GAME_TILE_COLS=[("#F72585","#7209B7"),("#4CC9F0","#3A0CA3"),("#FFD23F","#FF6B35"),("#3BCEAC","#0B6E4F"),("#FF4D6D","#590D22"),("#B8F2E6","#5E60CE"),("#F4A261","#9D0208"),("#90BE6D","#277DA1")]
+def game_tile(ctx, x, y, w, h, seed, glow=0.0):
+    """Generic, original 'game cover' tile (abstract art only)."""
+    c1,c2=GAME_TILE_COLS[seed%len(GAME_TILE_COLS)]
+    rrect(ctx,x,y,w,h,min(w,h)*0.12)
+    g=cairo.LinearGradient(x,y,x,y+h); g.add_color_stop_rgb(0,*hexc(c1)); g.add_color_stop_rgb(1,*hexc(c2)); ctx.set_source(g); ctx.fill_preserve()
+    ctx.set_source_rgb(*INK); ctx.set_line_width(max(2,w*0.03)); ctx.stroke()
+    cx,cy,r=x+w/2,y+h*0.45,min(w,h)*0.26; kind=seed%5
+    ctx.set_source_rgba(1,1,1,0.92)
+    if kind==0: star(ctx,cx,cy,r); ctx.fill()
+    elif kind==1: ellipse(ctx,cx,cy,r,r); ctx.fill(); ellipse(ctx,cx,cy,r*1.6,r*0.35); ctx.set_line_width(max(2,w*0.025)); ctx.stroke()
+    elif kind==2:
+        ctx.move_to(cx-r,cy+r); ctx.line_to(cx,cy-r); ctx.line_to(cx+r,cy+r); ctx.close_path(); ctx.fill()
+    elif kind==3:
+        ctx.move_to(cx-r*0.2,cy+r); ctx.line_to(cx-r*0.2,cy-r*0.6); ctx.line_to(cx,cy-r); ctx.line_to(cx+r*0.2,cy-r*0.6); ctx.line_to(cx+r*0.2,cy+r); ctx.close_path(); ctx.fill()
+        ctx.rectangle(cx-r*0.6,cy+r*0.4,r*1.2,r*0.18); ctx.fill()
+    else:
+        rrect(ctx,cx-r,cy-r*0.4,r*2,r*0.8,r*0.3); ctx.fill(); ellipse(ctx,cx-r*0.55,cy+r*0.45,r*0.28,r*0.28); ctx.fill(); ellipse(ctx,cx+r*0.55,cy+r*0.45,r*0.28,r*0.28); ctx.fill()
+    rrect(ctx,x+w*0.15,y+h*0.78,w*0.7,h*0.08,h*0.04); ctx.set_source_rgba(1,1,1,0.75); ctx.fill()
+    if glow>0:
+        rrect(ctx,x-6,y-6,w+12,h+12,min(w,h)*0.14); ctx.set_source_rgba(1,0.85,0.2,glow); ctx.set_line_width(8); ctx.stroke()
+
+def beret(ctx, x, y, s=1.0, rot=-0.25):
+    ctx.save(); ctx.translate(x,y); ctx.rotate(rot); ctx.scale(s,s)
+    ellipse(ctx,0,0,150,55); fill_stroke(ctx,hexc("#C1121F"),7)
+    ellipse(ctx,0,-48,14,14); fill_stroke(ctx,hexc("#C1121F"),5)
+    ctx.restore()
+def palette(ctx, x, y, s=1.0, t=0):
+    ctx.save(); ctx.translate(x,y); ctx.scale(s,s); ctx.rotate(0.15*math.sin(t*3))
+    ctx.move_to(-110,0); ctx.curve_to(-110,-90,90,-100,110,-20); ctx.curve_to(120,40,40,30,40,60); ctx.curve_to(40,100,-110,90,-110,0); ctx.close_path()
+    fill_stroke(ctx,hexc("#E9C46A"),7)
+    ellipse(ctx,10,40,16,14); ctx.set_source_rgb(*hexc("#2A1B54")); ctx.fill()
+    for (px,py,c) in [(-60,-30,"#E63946"),(-15,-55,"#3A86FF"),(35,-50,"#FFD23F"),(-70,25,"#2EC45A"),(75,-25,"#F72585")]:
+        ellipse(ctx,px,py,17,15); ctx.set_source_rgb(*hexc(c)); ctx.fill()
+    ctx.restore()
+def clock(ctx, x, y, r, t, speed=6):
+    ellipse(ctx,x,y,r,r); fill_stroke(ctx,(1,1,1),8)
+    for i in range(12):
+        a=i*math.pi/6; ctx.move_to(x+r*0.82*math.cos(a),y+r*0.82*math.sin(a)); ctx.line_to(x+r*0.92*math.cos(a),y+r*0.92*math.sin(a))
+        ctx.set_source_rgb(*INK); ctx.set_line_width(5); ctx.stroke()
+    for L_,sp,lw_ in [(0.5,speed/12,10),(0.75,speed,6)]:
+        a=t*sp-math.pi/2; ctx.move_to(x,y); ctx.line_to(x+r*L_*math.cos(a),y+r*L_*math.sin(a)); ctx.set_line_width(lw_); ctx.set_line_cap(cairo.LINE_CAP_ROUND); ctx.stroke()
+def moon(ctx, x, y, r):
+    ctx.save(); ellipse(ctx,x,y,r,r); ctx.clip()
+    ctx.set_fill_rule(cairo.FILL_RULE_EVEN_ODD); ellipse(ctx,x,y,r,r); ellipse(ctx,x+r*0.45,y-r*0.2,r*0.85,r*0.85)
+    ctx.set_source_rgb(*hexc("#FFE45E")); ctx.fill(); ctx.restore()
