@@ -397,3 +397,49 @@ def moon(ctx, x, y, r):
     ctx.save(); ellipse(ctx,x,y,r,r); ctx.clip()
     ctx.set_fill_rule(cairo.FILL_RULE_EVEN_ODD); ellipse(ctx,x,y,r,r); ellipse(ctx,x+r*0.45,y-r*0.2,r*0.85,r*0.85)
     ctx.set_source_rgb(*hexc("#FFE45E")); ctx.fill(); ctx.restore()
+
+def diya(ctx, x, y, s=1.0, t=0.0, seed=0):
+    ctx.save(); ctx.translate(x,y); ctx.scale(s,s)
+    fl=1+0.12*math.sin(t*17+seed*2.1)+0.06*math.sin(t*29+seed)
+    g=cairo.RadialGradient(0,-55,0,0,-55,120*fl); g.add_color_stop_rgba(0,1,0.85,0.3,0.55); g.add_color_stop_rgba(1,1,0.6,0.1,0)
+    ctx.set_source(g); ctx.arc(0,-55,120*fl,0,2*math.pi); ctx.fill()
+    ctx.move_to(-70,-8); ctx.curve_to(-60,45,60,45,70,-8); ctx.curve_to(40,6,-40,6,-70,-8); ctx.close_path(); fill_stroke(ctx,hexc("#C8553D"),6)
+    ctx.move_to(-62,-4); ctx.curve_to(-30,10,30,10,62,-4); ctx.set_source_rgb(*hexc("#F2CC8F")); ctx.set_line_width(5); ctx.stroke()
+    for k in (-30,0,30): ellipse(ctx,k,18,6,6); ctx.set_source_rgb(*hexc("#F2CC8F")); ctx.fill()
+    ctx.save(); ctx.translate(0,-14); ctx.scale(1,fl)
+    ctx.move_to(0,-58); ctx.curve_to(22,-30,18,-6,0,0); ctx.curve_to(-18,-6,-22,-30,0,-58); ctx.close_path()
+    fg=cairo.LinearGradient(0,-58,0,0); fg.add_color_stop_rgb(0,*hexc("#FFF3B0")); fg.add_color_stop_rgb(1,*hexc("#FF8C1A")); ctx.set_source(fg); ctx.fill()
+    ctx.restore(); ctx.restore()
+
+def firework(ctx, x, y, t, t0, col=(1,0.8,0.2), n=26, R=230, dur=1.4):
+    u=t-t0
+    if u<0 or u>dur: return
+    p=ease_out(u/dur); a_=max(0,1-u/dur)
+    for i in range(n):
+        a=i*2*math.pi/n; rr=R*p
+        x1=x+rr*math.cos(a); y1=y+rr*math.sin(a)+60*p*p
+        x0=x+rr*0.75*math.cos(a); y0=y+rr*0.75*math.sin(a)+45*p*p
+        ctx.move_to(x0,y0); ctx.line_to(x1,y1); ctx.set_source_rgba(*col,a_); ctx.set_line_width(6); ctx.set_line_cap(cairo.LINE_CAP_ROUND); ctx.stroke()
+        ellipse(ctx,x1,y1,5,5); ctx.set_source_rgba(1,1,1,a_); ctx.fill()
+
+def lantern(ctx, x, y, s, t, col="#FF4D6D"):
+    ctx.save(); ctx.translate(x,y); ctx.rotate(0.06*math.sin(t*2+x)); ctx.scale(s,s)
+    ctx.move_to(0,-200); ctx.line_to(0,-70); ctx.set_source_rgb(*INK); ctx.set_line_width(4); ctx.stroke()
+    ctx.move_to(0,-70); ctx.line_to(70,0); ctx.line_to(0,70); ctx.line_to(-70,0); ctx.close_path(); fill_stroke(ctx,hexc(col),6)
+    ctx.move_to(0,-70); ctx.line_to(0,70); ctx.move_to(-70,0); ctx.line_to(70,0); ctx.set_source_rgba(1,1,1,0.6); ctx.set_line_width(3); ctx.stroke()
+    for k in range(-2,3): ctx.move_to(k*12,70); ctx.line_to(k*14,130); ctx.set_source_rgb(*hexc("#FFD23F")); ctx.set_line_width(4); ctx.stroke()
+    g=cairo.RadialGradient(0,0,0,0,0,140); g.add_color_stop_rgba(0,1,0.8,0.3,0.25); g.add_color_stop_rgba(1,1,0.6,0.2,0); ctx.set_source(g); ctx.arc(0,0,140,0,2*math.pi); ctx.fill()
+    ctx.restore()
+
+def coupon_ticket(ctx, cx, cy, w, h, k, t):
+    if k<=0.02: return
+    ctx.save(); ctx.translate(cx,cy); ctx.rotate(-0.05+0.02*math.sin(t*3)); ctx.scale(k,k)
+    r=34
+    ctx.move_to(-w/2+r,-h/2); ctx.line_to(w/2-r,-h/2); ctx.arc(w/2-r,-h/2+r,r,-math.pi/2,0)
+    ctx.line_to(w/2,-20); ctx.arc_negative(w/2,0,20,-math.pi/2,math.pi/2); ctx.line_to(w/2,h/2-r); ctx.arc(w/2-r,h/2-r,r,0,math.pi/2)
+    ctx.line_to(-w/2+r,h/2); ctx.arc(-w/2+r,h/2-r,r,math.pi/2,math.pi); ctx.line_to(-w/2,20); ctx.arc_negative(-w/2,0,20,math.pi/2,-math.pi/2)
+    ctx.line_to(-w/2,-h/2+r); ctx.arc(-w/2+r,-h/2+r,r,math.pi,1.5*math.pi); ctx.close_path()
+    g=cairo.LinearGradient(0,-h/2,0,h/2); g.add_color_stop_rgb(0,*hexc("#FFD23F")); g.add_color_stop_rgb(1,*hexc("#FF9F1C")); ctx.set_source(g); ctx.fill_preserve()
+    ctx.set_source_rgb(*INK); ctx.set_line_width(8); ctx.stroke()
+    ctx.set_dash([14,12]); ctx.move_to(w*0.18,-h/2+16); ctx.line_to(w*0.18,h/2-16); ctx.set_line_width(5); ctx.stroke(); ctx.set_dash([])
+    ctx.restore()
