@@ -1,0 +1,17 @@
+{"name": "reel006", "model": "bulbul:v4-flash", "lines": [
+ {"id": "01", "speaker": "sunny_hi_reels", "pace": 1.2, "text": "ओय्ये! दिवाली पे पटाखे ही नहीं... गेम्स पे भी डिस्काउंट मिल रहा है?!"},
+ {"id": "02", "speaker": "ritu_hi_reels", "pace": 1.08, "text": "क्या बात कर रहा है गोलू? गेमिंग पे भी दिवाली ऑफ़र?"},
+ {"id": "03", "speaker": "sunny_hi_reels", "pace": 1.2, "text": "अरे भाई! जल्दी राजू को बुलाओ!"},
+ {"id": "04", "speaker": "aryaman_hi_ads", "pace": 1.35, "text": "बिल्कुल! चीप पी सी गेम्स स्टोर का दिवाली धमाका शुरू हो चुका है! गेम्स सिर्फ़ निन्यानवे रुपये से स्टार्ट!"},
+ {"id": "05", "speaker": "sunny_hi_reels", "pace": 1.2, "text": "भाई भाई भाई! और डिस्काउंट?!"},
+ {"id": "06", "speaker": "aryaman_hi_ads", "pace": 1.35, "text": "चेकआउट पे कूपन कोड, दिवाली टेन, लगाओ और पाओ इंस्टेंट दस परसेंट ऑफ़!"},
+ {"id": "07", "speaker": "ritu_hi_reels", "pace": 1.08, "text": "कोई मिनिमम पर्चेज़ भी है?"},
+ {"id": "08", "speaker": "aryaman_hi_ads", "pace": 1.35, "text": "बिल्कुल नहीं! ज़ीरो मिनिमम पर्चेज़!"},
+ {"id": "09", "speaker": "ritu_hi_reels", "pace": 1.08, "text": "और स्टोर पे भरोसा कैसे करें?"},
+ {"id": "10", "speaker": "aryaman_hi_ads", "pace": 1.35, "text": "जी एस टी रजिस्टर्ड, उद्यम रजिस्टर्ड, दो हज़ार प्लस हैप्पी कस्टमर्स! वेबसाइट पे व्हाट्सऐप डिलीवरी प्रूफ़्स भी अवेलेबल हैं!"},
+ {"id": "11", "speaker": "sunny_hi_reels", "pace": 1.2, "text": "तो देर क्यों?!"},
+ {"id": "12", "speaker": "aryaman_hi_ads", "pace": 1.35, "text": "ऑफ़र सिर्फ़ बारह नवंबर तक लाइव है!"},
+ {"id": "13a", "speaker": "sunny_hi_reels", "pace": 1.15, "text": "अभी शॉप करो!"},
+ {"id": "13b", "speaker": "aryaman_hi_ads", "pace": 1.15, "text": "अभी शॉप करो!"},
+ {"id": "13c", "speaker": "ritu_hi_reels", "pace": 1.15, "text": "अभी शॉप करो!"}
+]}
