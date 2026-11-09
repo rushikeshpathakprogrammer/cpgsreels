@@ -1,0 +1,12 @@
+{"name": "reel007", "model": "bulbul:v4-flash", "lines": [
+ {"id": "01", "speaker": "sunny_hi_reels", "pace": 1.2, "text": "भाई! मैंने गेम ख़रीद ली... पर दस परसेंट डिस्काउंट लगाना भूल गया!"},
+ {"id": "02", "speaker": "ritu_hi_reels", "pace": 1.08, "text": "हाय राम! इतनी जल्दी क्या थी तुझे?!"},
+ {"id": "03", "speaker": "sunny_hi_reels", "pace": 1.2, "text": "अब क्या करूँ?!"},
+ {"id": "04", "speaker": "aryaman_hi_ads", "pace": 1.35, "text": "अबे पागल! दिवाली ऑफ़र अभी लाइव है!"},
+ {"id": "05", "speaker": "sunny_hi_reels", "pace": 1.15, "text": "सच्चीईई?!"},
+ {"id": "06", "speaker": "aryaman_hi_ads", "pace": 1.35, "text": "चीप पी सी गेम्स स्टोर पे गेम्स निन्यानवे रुपये से स्टार्ट होते हैं। चेकआउट पे, दिवाली टेन, लगाओ और पाओ इंस्टेंट दस परसेंट ऑफ़!"},
+ {"id": "07", "speaker": "ritu_hi_reels", "pace": 1.08, "text": "और मिनिमम पर्चेज़?"},
+ {"id": "08", "speaker": "aryaman_hi_ads", "pace": 1.35, "text": "कोई मिनिमम पर्चेज़ नहीं!"},
+ {"id": "09", "speaker": "sunny_hi_reels", "pace": 1.2, "text": "तो जल्दी करो दोस्तों!"},
+ {"id": "10", "speaker": "aryaman_hi_ads", "pace": 1.35, "text": "ऑफ़र सिर्फ़ बारह नवंबर तक है!"}
+]}
