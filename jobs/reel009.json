@@ -1,0 +1,14 @@
+{"name": "reel009", "model": "bulbul:v4-flash", "lines": [
+ {"id": "01", "speaker": "sunny_hi_reels", "pace": 1.2, "text": "राजू! मेरे पास सिर्फ़ पाँच सौ रुपये हैं... गेमिंग कर सकता हूँ क्या?!"},
+ {"id": "02", "speaker": "ritu_hi_reels", "pace": 1.08, "text": "पाँच सौ रुपये में? भाई, क्या ख़रीदेगा?"},
+ {"id": "03", "speaker": "sunny_hi_reels", "pace": 1.2, "text": "गेम खेलना है यार, अमीर नहीं बनना!"},
+ {"id": "04", "speaker": "aryaman_hi_ads", "pace": 1.35, "text": "अबे बडी! चीप पी सी गेम्स स्टोर चेक कर! यहाँ गेम्स निन्यानवे रुपये से स्टार्ट होते हैं!"},
+ {"id": "06", "speaker": "aryaman_hi_ads", "pace": 1.35, "text": "और दिवाली ऑफ़र भी लाइव है! चेकआउट पे, दिवाली टेन, कूपन लगा और इंस्टेंट दस परसेंट ऑफ़ पा!"},
+ {"id": "09", "speaker": "sunny_hi_reels", "pace": 1.2, "text": "और स्टोर जेन्युइन है ना?"},
+ {"id": "10", "speaker": "aryaman_hi_ads", "pace": 1.35, "text": "जी एस टी रजिस्टर्ड, उद्यम रजिस्टर्ड, दो हज़ार प्लस हैप्पी कस्टमर्स! वेबसाइट पे व्हाट्सऐप डिलीवरी प्रूफ़्स भी हैं!"},
+ {"id": "11", "speaker": "sunny_hi_reels", "pace": 1.2, "text": "भाई, अभी ऑर्डर कर रहा हूँ!"},
+ {"id": "12", "speaker": "aryaman_hi_ads", "pace": 1.35, "text": "जल्दी करो! दिवाली ऑफ़र बारह नवंबर को ख़त्म!"},
+ {"id": "13a", "speaker": "sunny_hi_reels", "pace": 1.15, "text": "शॉप नाउ!"},
+ {"id": "13b", "speaker": "aryaman_hi_ads", "pace": 1.15, "text": "शॉप नाउ!"},
+ {"id": "13c", "speaker": "ritu_hi_reels", "pace": 1.15, "text": "शॉप नाउ!"}
+]}
