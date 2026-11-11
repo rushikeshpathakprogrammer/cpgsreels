@@ -443,3 +443,14 @@ def coupon_ticket(ctx, cx, cy, w, h, k, t):
     ctx.set_source_rgb(*INK); ctx.set_line_width(8); ctx.stroke()
     ctx.set_dash([14,12]); ctx.move_to(w*0.18,-h/2+16); ctx.line_to(w*0.18,h/2-16); ctx.set_line_width(5); ctx.stroke(); ctx.set_dash([])
     ctx.restore()
+
+def money_note(ctx, x, y, s=1.0, rot=0.0, t=0.0, amount="₹500"):
+    """Simplified cartoon banknote (not a currency replica)."""
+    ctx.save(); ctx.translate(x,y); ctx.rotate(rot+0.05*math.sin(t*5)); ctx.scale(s,s)
+    rrect(ctx,-150,-70,300,140,14)
+    g=cairo.LinearGradient(-150,0,150,0); g.add_color_stop_rgb(0,*hexc("#A8A48C")); g.add_color_stop_rgb(1,*hexc("#8C8A70")); ctx.set_source(g); ctx.fill_preserve()
+    ctx.set_source_rgb(*INK); ctx.set_line_width(6); ctx.stroke()
+    rrect(ctx,-130,-52,260,104,10); ctx.set_source_rgba(1,1,1,0.25); ctx.set_line_width(3); ctx.stroke()
+    ellipse(ctx,-70,0,38,38); ctx.set_source_rgba(1,1,1,0.25); ctx.fill()
+    ctx.restore()
+    paint_text(ctx,amount,x+40*s*math.cos(rot),y+40*s*math.sin(rot),int(62*s),fill=(40,45,30),stroke=(220,220,200),sw=max(1,int(3*s)),font="Baloo2.ttf",pad=4,rot=rot+0.05*math.sin(t*5))
