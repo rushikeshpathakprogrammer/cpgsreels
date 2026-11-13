@@ -454,3 +454,39 @@ def money_note(ctx, x, y, s=1.0, rot=0.0, t=0.0, amount="₹500"):
     ellipse(ctx,-70,0,38,38); ctx.set_source_rgba(1,1,1,0.25); ctx.fill()
     ctx.restore()
     paint_text(ctx,amount,x+40*s*math.cos(rot),y+40*s*math.sin(rot),int(62*s),fill=(40,45,30),stroke=(220,220,200),sw=max(1,int(3*s)),font="Baloo2.ttf",pad=4,rot=rot+0.05*math.sin(t*5))
+
+def genre_icon(ctx, kind, x, y, s=1.0, t=0.0):
+    ctx.save(); ctx.translate(x,y); ctx.scale(s,s)
+    if kind=="action":
+        star(ctx,0,0,90,n=10,inner=0.55,rot=t*0.5); ctx.set_source_rgb(*hexc("#FF4D6D")); ctx.fill_preserve(); ctx.set_source_rgb(*INK); ctx.set_line_width(6); ctx.stroke()
+        star(ctx,0,0,50,n=8,inner=0.5,rot=-t); ctx.set_source_rgb(*hexc("#FFD23F")); ctx.fill()
+    elif kind=="adventure":
+        ctx.move_to(-95,60); ctx.line_to(-25,-55); ctx.line_to(15,5); ctx.line_to(45,-30); ctx.line_to(100,60); ctx.close_path(); fill_stroke(ctx,hexc("#3BCEAC"),6)
+        ctx.move_to(-25,-55); ctx.line_to(-8,-28); ctx.line_to(-42,-28); ctx.close_path(); ctx.set_source_rgb(1,1,1); ctx.fill()
+        ctx.move_to(45,-30); ctx.line_to(45,-90); ctx.set_source_rgb(*INK); ctx.set_line_width(5); ctx.stroke()
+        ctx.move_to(45,-90); ctx.line_to(85,-77); ctx.line_to(45,-64); ctx.close_path(); ctx.set_source_rgb(*hexc("#FFD23F")); ctx.fill()
+    elif kind=="racing":
+        rrect(ctx,-95,-10,190,55,20); fill_stroke(ctx,hexc("#4CC9F0"),6)
+        ctx.move_to(-55,-10); ctx.line_to(-30,-45); ctx.line_to(35,-45); ctx.line_to(60,-10); ctx.close_path(); fill_stroke(ctx,hexc("#4CC9F0"),6)
+        for wx in (-50,50): ellipse(ctx,wx,48,24,24); fill_stroke(ctx,hexc("#1D1D24"),5)
+        for i in range(4):
+            for j in range(2):
+                ctx.rectangle(60+i*12,-95+j*12,12,12); ctx.set_source_rgb(*((0,0,0) if (i+j)%2 else (1,1,1))); ctx.fill()
+        ctx.move_to(60,-95); ctx.line_to(60,-40); ctx.set_source_rgb(*INK); ctx.set_line_width(4); ctx.stroke()
+    else:  # story
+        ctx.move_to(0,-55); ctx.curve_to(-40,-75,-80,-70,-100,-60); ctx.line_to(-100,60); ctx.curve_to(-80,50,-40,45,0,65); ctx.close_path(); fill_stroke(ctx,hexc("#FFF6D6"),6)
+        ctx.move_to(0,-55); ctx.curve_to(40,-75,80,-70,100,-60); ctx.line_to(100,60); ctx.curve_to(80,50,40,45,0,65); ctx.close_path(); fill_stroke(ctx,hexc("#FFF6D6"),6)
+        for k in range(4):
+            ctx.move_to(-82,-38+k*22); ctx.line_to(-18,-38+k*22+4); ctx.move_to(18,-38+k*22+4); ctx.line_to(82,-38+k*22)
+        ctx.set_source_rgba(0,0,0,0.35); ctx.set_line_width(4); ctx.stroke()
+    ctx.restore()
+
+def genre_card(ctx, kind, label, cx, cy, k, t, col):
+    if k<=0.02: return
+    ctx.save(); ctx.translate(cx,cy); ctx.scale(k,k)
+    rrect(ctx,-150,-170,300,340,34)
+    g=cairo.LinearGradient(0,-170,0,170); g.add_color_stop_rgb(0,*hexc(col[0])); g.add_color_stop_rgb(1,*hexc(col[1])); ctx.set_source(g); ctx.fill_preserve()
+    ctx.set_source_rgb(*INK); ctx.set_line_width(8); ctx.stroke()
+    genre_icon(ctx,kind,0,-30,1.0,t)
+    ctx.restore()
+    paint_text(ctx,label,cx,cy+120*k,int(46),scale=k,fill=(255,255,255),stroke=(20,10,30),font="LuckiestGuy.ttf",pad=6)
