@@ -260,6 +260,7 @@ def live_badge(ctx,x,y,k,t):
 
 CHECKS=[(1,"SYSTEM REQUIREMENTS",icon_sysreq,(0.3,0.9,1.0)),(2,"PLATFORM & EDITION",icon_platform,(1.0,0.35,0.75)),(3,"ACTIVATION CONDITIONS",icon_key,(1.0,0.82,0.25))]
 def exam_paper(ctx,x,y,s,t):
+    if s<0.05: return
     ctx.save(); ctx.translate(x,y); ctx.rotate(-0.12+0.04*math.sin(t*3)); ctx.scale(s,s)
     rrect(ctx,-160,-210,320,420,14); fill_stroke(ctx,(1,1,1),7)
     ctx.rectangle(-160,-210,320,70); ctx.set_source_rgb(*hexc("#E63946")); ctx.fill()
