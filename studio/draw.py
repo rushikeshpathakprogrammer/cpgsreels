@@ -490,3 +490,55 @@ def genre_card(ctx, kind, label, cx, cy, k, t, col):
     genre_icon(ctx,kind,0,-30,1.0,t)
     ctx.restore()
     paint_text(ctx,label,cx,cy+120*k,int(46),scale=k,fill=(255,255,255),stroke=(20,10,30),font="LuckiestGuy.ttf",pad=6)
+
+def icon_sysreq(ctx,x,y,s=1.0):
+    ctx.save(); ctx.translate(x,y); ctx.scale(s,s)
+    rrect(ctx,-70,-60,100,120,10); fill_stroke(ctx,hexc("#2B2B36"),5)
+    for i in range(3): rrect(ctx,-58,-45+i*22,76,12,5); ctx.set_source_rgb(*hexc("#4CC9F0")); ctx.fill()
+    ctx.arc(55,30,45,math.pi,2*math.pi); ctx.set_source_rgb(1,1,1); ctx.set_line_width(12); ctx.stroke()
+    ctx.move_to(55,30); ctx.line_to(85,0); ctx.set_source_rgb(*hexc("#E63946")); ctx.set_line_width(7); ctx.set_line_cap(cairo.LINE_CAP_ROUND); ctx.stroke()
+    ctx.restore()
+def icon_platform(ctx,x,y,s=1.0):
+    ctx.save(); ctx.translate(x,y); ctx.scale(s,s)
+    rrect(ctx,-95,-65,190,130,14); fill_stroke(ctx,hexc("#1B1F3B"),5)
+    ctx.rectangle(-95,-65,190,28); ctx.set_source_rgb(*hexc("#5E60CE")); ctx.fill()
+    for i,c in enumerate(["#FF4D6D","#FFD23F","#3BCEAC"]): ellipse(ctx,-75+i*18,-51,6,6); ctx.set_source_rgb(*hexc(c)); ctx.fill()
+    for r in range(2):
+        for c in range(3): rrect(ctx,-80+c*56,-28+r*44,46,36,6); ctx.set_source_rgb(*hexc(["#F72585","#4CC9F0","#FFD23F","#3BCEAC","#FF9F1C","#B8F2E6"][r*3+c])); ctx.fill()
+    ctx.restore()
+def icon_key(ctx,x,y,s=1.0):
+    ctx.save(); ctx.translate(x,y); ctx.scale(s,s)
+    ctx.arc(45,0,40,math.pi,2*math.pi); ctx.set_source_rgb(*hexc("#ADB5BD")); ctx.set_line_width(14); ctx.stroke()
+    rrect(ctx,0,-5,90,80,12); fill_stroke(ctx,hexc("#FFD23F"),5); ellipse(ctx,45,30,10,10); ctx.set_source_rgb(*INK); ctx.fill()
+    ellipse(ctx,-55,10,28,28); fill_stroke(ctx,hexc("#F4A261"),5); ellipse(ctx,-55,10,10,10); ctx.set_source_rgb(*hexc("#1B1F3B")); ctx.fill()
+    ctx.move_to(-28,10); ctx.line_to(5,10); ctx.set_source_rgb(*hexc("#F4A261")); ctx.set_line_width(12); ctx.stroke()
+    ctx.restore()
+def check_card(ctx,num,title,icon,cx,cy,k,t,col,checked=True,w=860,h=200):
+    if k<=0.02: return
+    ctx.save(); ctx.translate(cx,cy); ctx.scale(k,k)
+    for gw,ga in [(26,0.12),(10,0.4)]:
+        rrect(ctx,-w/2,-h/2,w,h,34); ctx.set_source_rgba(*col,ga); ctx.set_line_width(gw); ctx.stroke()
+    rrect(ctx,-w/2,-h/2,w,h,34); ctx.set_source_rgba(0.06,0.03,0.16,0.92); ctx.fill_preserve(); ctx.set_source_rgb(*col); ctx.set_line_width(6); ctx.stroke()
+    ellipse(ctx,-w/2+75,0,52,52); ctx.set_source_rgb(*col); ctx.fill()
+    icon(ctx,-w/2+195,0,0.72)
+    if checked:
+        ellipse(ctx,w/2-70,0,40,40); ctx.set_source_rgb(*hexc("#2EC45A")); ctx.fill()
+        ctx.move_to(w/2-88,0); ctx.line_to(w/2-74,16); ctx.line_to(w/2-50,-14); ctx.set_source_rgb(1,1,1); ctx.set_line_width(9); ctx.set_line_cap(cairo.LINE_CAP_ROUND); ctx.stroke()
+    ctx.restore()
+    paint_text(ctx,str(num),cx+(-w/2+75)*k,cy,64,scale=k,fill=(20,10,30),stroke=tuple(int(c*255) for c in col),sw=0,font="LuckiestGuy.ttf",pad=4)
+    paint_text(ctx,title,cx+(110 if w>=860 else 100)*k,cy,56 if len(title)<18 else 48,scale=k,fill=(255,255,255),stroke=(20,5,40),font="LuckiestGuy.ttf",pad=6)
+def shades(ctx,x,y,s=1.0):
+    ctx.save(); ctx.translate(x,y); ctx.scale(s,s)
+    for sx in (-1,1): rrect(ctx,sx*48-40,-30,80,48,14); ctx.set_source_rgb(0.08,0.08,0.1); ctx.fill()
+    ctx.move_to(-10,-18); ctx.line_to(10,-18); ctx.set_source_rgb(0.08,0.08,0.1); ctx.set_line_width(8); ctx.stroke()
+    for sx in (-1,1): ctx.move_to(sx*48-25,-20); ctx.line_to(sx*48-5,-20); ctx.set_source_rgba(1,1,1,0.6); ctx.set_line_width(5); ctx.stroke()
+    ctx.restore()
+def buy_screen(c,x,y,w,h,t,blocked=False):
+    c.set_source_rgb(*hexc("#0F1220")); c.rectangle(x,y,w,h); c.fill()
+    game_tile(c,x+w*0.06,y+h*0.1,w*0.36,h*0.7,3)
+    for i in range(3): rrect(c,x+w*0.48,y+h*(0.14+i*0.1),w*(0.42-i*0.08),h*0.05,6); c.set_source_rgba(1,1,1,0.3); c.fill()
+    rrect(c,x+w*0.48,y+h*0.58,w*0.44,h*0.18,12); c.set_source_rgb(*hexc("#2EC45A")); c.fill()
+    paint_text(c,"BUY NOW",x+w*0.70,y+h*0.67,int(h*0.09),fill=(255,255,255),stroke=(46,196,90),sw=0,font="LuckiestGuy.ttf",pad=4)
+    if blocked:
+        c.move_to(x+w*0.47,y+h*0.56); c.line_to(x+w*0.93,y+h*0.78); c.move_to(x+w*0.47,y+h*0.78); c.line_to(x+w*0.93,y+h*0.56)
+        c.set_source_rgb(*hexc("#E63946")); c.set_line_width(10); c.set_line_cap(cairo.LINE_CAP_ROUND); c.stroke()
